@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 
-from account.views import smoke
+from account.views import SignUp
 
 urlpatterns = [
-    path('smoke/', smoke),
+    path('signup/', SignUp.as_view(), name='signup'),
 ]
