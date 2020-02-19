@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'debug_toolbar',
+    'django_celery_beat',
 
     'account.apps.AccountConfig',
 ]
@@ -142,6 +145,14 @@ AUTH_USER_MODEL = 'account.User'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+CELERY_BROKER_URL = 'rabbitmq'
+CELERY_BEAT_SCHEDULE = {
+    'print-every-minute': {
+        'task': 'account.tasks.print_word',
+        'schedule': crontab(),
+    },
+}
 
 try:
     from currency_exchange.settings_local import *

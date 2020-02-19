@@ -21,13 +21,42 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - "5432:5432"#  TODO  освободить стандартный порт в системе
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=123qweasd
       - POSTGRES_USER=ce_user
       - POSTGRES_DB=currency_exchange
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  celery:
+    image: celery:4.4.0
+    build: .
+    command: bash -c "cd ./src && celery -A currency_exchange worker -l info"
+    volumes:
+      - .:/code
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  celery-beat:
+    build: .
+    command: bash -c "cd ./src && celery -A currency_exchange beat -l INFO"
+    volumes:
+      - .:/code
+    depends_on:
+      - postgres
+      - rabbitmq
 
 volumes:
   pgdata:
