@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'currency_exchange',
         'USER': 'ce_user',
         'PASSWORD': '123qweasd',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }

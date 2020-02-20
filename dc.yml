@@ -16,6 +16,25 @@ services:
     ports:
       - "11211:11211"
 
+  celery:
+    image: celery:4.4.0
+    build: .
+    command: bash -c "celery -A currency_exchange worker -l info"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  celery-beat:
+    build: .
+    command: bash -c "celery -A currency_exchange beat -l INFO"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+
   postgres:
     image: postgres:11.3
     container_name: postgres
@@ -30,35 +49,16 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   web:
+    container_name: web
     build: .
+    command: python src/manage.py migrate --noinput
     command: python src/manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - postgres
 
-  celery:
-    image: celery:4.4.0
-    build: .
-    command: bash -c "cd ./src && celery -A currency_exchange worker -l info"
-    volumes:
-      - .:/code
-    depends_on:
-      - postgres
-      - rabbitmq
-
-  celery-beat:
-    build: .
-    command: bash -c "cd ./src && celery -A currency_exchange beat -l INFO"
-    volumes:
-      - .:/code
-    depends_on:
-      - postgres
-      - rabbitmq
-
 volumes:
-  pgdata:
-
-
+  pgdata: {}
