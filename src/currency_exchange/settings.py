@@ -38,8 +38,10 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'debug_toolbar',
+    'django_celery_beat',
 
     'account.apps.AccountConfig',
+    'currency',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,15 @@ AUTH_USER_MODEL = 'account.User'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'parse-rates': {
+        'task': 'currency.tasks.parse_rates',
+        'schedule': crontab(),
+    }
+}
 
 try:
     from currency_exchange.settings_local import *
