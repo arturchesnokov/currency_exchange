@@ -5,10 +5,11 @@ CURRENCY_CHOICES = (
     (CURR_EUR, 'EUR'),
 )
 
-SR_PRIVAT, SR_MONO, SR_VKURSE_DP, SR_OBMEN_DP, SR_FINANCE_I_UA = range(1, 6)
+SR_PRIVAT, SR_MONO, SR_OTP, SR_VKURSE_DP, SR_OBMEN_DP, SR_FINANCE_I_UA = range(1, 7)
 SOURCE_CHOICES = (
     (SR_PRIVAT, 'PrivatBank'),
     (SR_MONO, 'MonoBank'),
+    (SR_OTP, 'OTPBank'),
     (SR_VKURSE_DP, 'vkurse.dp.ua'),
     (SR_OBMEN_DP, 'obmen.dp.ua'),
     (SR_FINANCE_I_UA, 'finance.i.ua'),
