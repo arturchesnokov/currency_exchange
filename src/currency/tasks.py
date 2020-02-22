@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from currency.data_source.bank_privat import _privat
+from currency.data_source.bank_privatbank import _privat
 from currency.data_source.bank_monobank import _mono
 from currency.data_source.bank_otp import _otp
 from currency.data_source.site_vkurse_dp_ua import _vkurse_dp_ua
