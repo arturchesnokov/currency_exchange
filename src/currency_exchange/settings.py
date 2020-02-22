@@ -145,7 +145,7 @@ AUTH_USER_MODEL = 'account.User'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-from celery.schedules import crontab
+from celery.schedules import crontab # noqa
 
 CELERY_BEAT_SCHEDULE = {
     'parse-rates': {
@@ -155,6 +155,6 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 try:
-    from currency_exchange.settings_local import *
+    from currency_exchange.settings_local import *  # noqa
 except ImportError:
     print('settings_local.py not found!\n' * 5)
