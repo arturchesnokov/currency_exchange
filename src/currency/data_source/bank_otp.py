@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from celery import shared_task
 
 import requests
 from decimal import Decimal
@@ -7,6 +8,7 @@ from currency import model_choices as mch
 from currency.data_source.service import previous_record_check_and_save, log
 
 
+@shared_task()
 def _otp():
     log.info('OTPBank parser started')
     page = requests.get("https://www.otpbank.com.ua/")

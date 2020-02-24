@@ -1,4 +1,5 @@
 from monobank_api import BaseAPI
+from celery import shared_task
 
 from decimal import Decimal
 
@@ -9,6 +10,7 @@ from currency.data_source.service import previous_record_check_and_save, log
 # 980 UAH
 # 978 EUR
 # 840 USD
+@shared_task()
 def _mono():
     log.info('MonoBank parser started')
     mono = BaseAPI()

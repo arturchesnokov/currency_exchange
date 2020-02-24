@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from celery import shared_task
 
 import requests
 from decimal import Decimal
@@ -7,9 +8,10 @@ from currency import model_choices as mch
 from currency.data_source.service import previous_record_check_and_save, log
 
 
+@shared_task()
 def _finance_i_ua():
     log.info('finance.i.ua parser started')
-    page = requests.get("https://finance.i.ua/")
+    page = requests.get("https://finance.i.ua")
     soup = BeautifulSoup(page.content, 'html.parser')
     currency_bank = soup.find('div', class_='widget-currency_bank')  # div with bank currency rates
     table_rows = currency_bank.select("div tr")  # css selector -> in <div> select all <tr>
