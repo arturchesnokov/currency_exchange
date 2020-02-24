@@ -1,9 +1,12 @@
 import requests
 from decimal import Decimal
+from celery import shared_task
 
 from currency import model_choices as mch
 from currency.data_source.service import previous_record_check_and_save, log
 
+
+@shared_task()
 def _obmen_dp_ua():
     log.info('obmen.dp.ua parser started')
     url = 'https://obmen.dp.ua/controls'

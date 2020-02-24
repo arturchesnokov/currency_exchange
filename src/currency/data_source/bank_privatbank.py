@@ -1,11 +1,12 @@
 import requests
 from decimal import Decimal
+from celery import shared_task
 
 from currency import model_choices as mch
 from currency.data_source.service import previous_record_check_and_save, log
 
 
-
+@shared_task()
 def _privat():
     log.info('PrivatBank parser started')
     url = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
