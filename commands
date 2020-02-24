@@ -1,0 +1,6 @@
+celery -A currency_exchange worker -l info -B
+
+docker ps -a
+docker-compose -f dc.yml up -d
+docker-compose -f dc.yml down
+

@@ -145,6 +145,7 @@ AUTH_USER_MODEL = 'account.User'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+
 from celery.schedules import crontab # noqa
 
 CELERY_BEAT_SCHEDULE = {
