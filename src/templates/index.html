@@ -5,11 +5,13 @@
 {% block content %}
   <div class="row">
     <div class="col">
-        <a href="{% url 'index' %}">Index link</a>
+        <a href="{% url 'index' %}">Index link</a> |
+        <a href="{% url 'account:contact' %}">contact form</a> |
+        <a href="{% url 'currency:rates' %}">rates history</a>
     </div>
     <div class="col">
       {% if user.is_anonymous %}
-      <a href="{% url 'account:registration' %}">SignUp</a>
+      <a href="{% url 'account:registration' %}">SignUp</a>   |||   
       <a href="{% url 'login' %}">LogIn</a>
       {% else %}
       <a href="{% url 'logout' %}">LogOut</a>
@@ -18,13 +20,7 @@
   </div>
 <div class="row">
     <div class="col">
-      1 of 3
-    </div>
-    <div class="col">
-      2 of 3
-    </div>
-    <div class="col">
-      3 of 3
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
     </div>
   </div>
 {% endblock %}
