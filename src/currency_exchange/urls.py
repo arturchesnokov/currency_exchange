@@ -9,16 +9,16 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
 
     path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
 
+    path('currency/', include('currency.urls')),
     path('account/', include('account.urls')),
-    path('account/', include('django.contrib.auth.urls')),
-
 
 ]
 
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+# if settings.DEBUG:
+#     import debug_toolbar
+#
+#     urlpatterns = [
+#                       path('__debug__/', include(debug_toolbar.urls)),
+#                   ] + urlpatterns
