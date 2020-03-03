@@ -23,6 +23,8 @@ class UserCreate(generic.CreateView):
     model = User
     fields = ['username', 'email']
     template_name = 'registration/registration.html'
+    success_url = reverse_lazy('index')
+
 
 
 class ContactForm(CreateView):
