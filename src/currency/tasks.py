@@ -8,8 +8,6 @@ from currency.data_source.site_obmen_dp_ua import _obmen_dp_ua
 from currency.data_source.site_finance_i_ua import _finance_i_ua
 
 
-
-
 @shared_task()
 def parse_rates():
     _privat.delay()
