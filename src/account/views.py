@@ -4,6 +4,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.conf import settings
+from django.views.generic import UpdateView
 
 from account.models import User
 from account.models import Contact
@@ -26,7 +27,6 @@ class UserCreate(generic.CreateView):
     success_url = reverse_lazy('index')
 
 
-
 class ContactForm(CreateView):
     model = Contact
     fields = ('email', 'title', 'text')
@@ -40,3 +40,13 @@ class ContactForm(CreateView):
         recipient_list = [settings.EMAIL_HOST_USER, ]
         send_email_async.delay(subject, message, email_from, recipient_list)
         return super().form_valid(form)
+
+
+# def my_profile(request):
+#     return render(request, 'my_profile.html')
+
+class MyProfile(UpdateView):
+    template_name = 'my_profile.html'
+    queryset = User.objects.filter(is_active=True)
+    fields = ('email',)
+    success_url = reverse_lazy('index')

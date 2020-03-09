@@ -13,6 +13,7 @@ services:
       - ./:/srv/project
     ports:
       - "8000:8000"
+      - "8001:8001"
     depends_on:
       - rabbitmq
 #      - postgres
