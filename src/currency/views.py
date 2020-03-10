@@ -17,5 +17,5 @@ class RateListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = Rate.objects.order_by('-created')
-        context['rates'] = queryset #зачем указываем имя контектсу если в шаблоне используем object_list?
+        context['rates'] = queryset  # зачем указываем имя контектсу если в шаблоне используем object_list?
         return context

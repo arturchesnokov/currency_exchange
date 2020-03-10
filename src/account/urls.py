@@ -11,5 +11,3 @@ urlpatterns = [
     path('contact/', ContactForm.as_view(), name='contact'),
     path('profile/<int:pk>/', MyProfile.as_view(), name='profile'),
 ]
-
-
