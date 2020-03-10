@@ -13,9 +13,10 @@ services:
       - ./:/srv/project
     ports:
       - "8000:8000"
+      - "8001:8001"
     depends_on:
       - rabbitmq
-      - postgres
+#      - postgres
       - memcached
 
   celery:
@@ -29,7 +30,7 @@ services:
       - ./:/srv/project
     depends_on:
       - rabbitmq
-      - postgres
+#      - postgres
 
   celerybeat:
     build: .
@@ -42,7 +43,7 @@ services:
       - ./:/srv/project
     depends_on:
       - rabbitmq
-      - postgres
+#      - postgres
 
 
   rabbitmq:
@@ -59,17 +60,17 @@ services:
     container_name: memcached
     restart: always
 
-  postgres:
-    image: postgres:11.3
-    container_name: postgres
-    restart: always
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+#  postgres:
+#    image: postgres:11.3
+#    container_name: postgres
+#    restart: always
+#    ports:
+#      - "5432:5432"
+#    env_file:
+#      - .env
+#
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
 
 
   nginx:
@@ -86,5 +87,3 @@ services:
 
 volumes:
   pgdata: {}
-
-

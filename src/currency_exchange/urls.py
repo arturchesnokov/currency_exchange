@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
 from django.conf import settings
 
@@ -9,16 +10,18 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
 
     path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
 
+    path('currency/', include('currency.urls')),
     path('account/', include('account.urls')),
-    path('account/', include('django.contrib.auth.urls')),
-
 
 ]
 
-
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+#     import debug_toolbar
+#
+#     urlpatterns = [
+#                       path('__debug__/', include(debug_toolbar.urls)),
+#                   ] + urlpatterns
