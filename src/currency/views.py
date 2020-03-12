@@ -16,6 +16,8 @@ class RateListView(ListView):
     model = Rate
     template_name = 'rate_list.html'
     paginate_by = 20
+    ordering = '-id'
+    # ordering = ('-id', '-source')
 
     # def get_context_data(self, *, object_list=None, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -23,8 +25,10 @@ class RateListView(ListView):
     #     context['rates'] = queryset  # зачем указываем имя контектсу если в шаблоне используем object_list?
     #     return context
 
-    def get_queryset(self):
-        return Rate.objects.all().order_by('-id')
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     return queryset.order_by('-id')
+        # return Rate.objects.all().order_by('-id')
 
 
 """
