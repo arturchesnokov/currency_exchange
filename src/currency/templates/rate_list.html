@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+
+{% block title %}Rates history{% endblock %}
+
+{% block content %}
+
+<table class="table table-striped">
+     <thead class="thead-dark">
+    <tr>
+        <th>ID</th>
+        <th>Created</th>
+        <th>Currency</th>
+        <th>Buy</th>
+        <th>Sale</th>
+        <th>From</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for rate in object_list %}
+    <tr>
+        <td>{{ rate.id }}</td>
+        <td>{{ rate.created }}</td>
+        <td>{{ rate.get_currency_display }}</td>
+        <td>{{ rate.buy }}</td>
+        <td>{{ rate.sale }}</td>
+        <td>{{ rate.get_source_display }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li><span class="page-link">&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+      <li class="page-item active" aria-current="page"><a class="page-link">{{ i }}</a></li>
+      {% else %}
+        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+{% endblock %}
