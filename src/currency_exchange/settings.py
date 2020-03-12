@@ -172,7 +172,7 @@ from celery.schedules import crontab  # noqa
 CELERY_BEAT_SCHEDULE = {
     'parse-rates': {
         'task': 'currency.tasks.parse_rates',
-        'schedule': crontab(),
+        'schedule': crontab(minute='*/10'),
     }
 }
 
