@@ -1,9 +1,18 @@
+from uuid import uuid4
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+def avatar_path(instance, filename: str) -> str:
+    ext = filename.split('.')[-1]
+    f_name = str(uuid4())
+    filename = f'{f_name}.{ext}'
+    return '/'.join(['avatar', str(instance.id), filename])
+
+
 class User(AbstractUser):
-    pass
+    avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True, default=None)
 
 
 class Contact(models.Model):

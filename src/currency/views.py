@@ -1,4 +1,7 @@
-from django.views.generic.list import ListView
+import csv
+
+from django.http import HttpResponse
+from django.views.generic.list import ListView, View
 from django.shortcuts import render
 
 from currency.models import Rate
@@ -22,3 +25,39 @@ class RateListView(ListView):
 
     def get_queryset(self):
         return Rate.objects.all().order_by('-id')
+
+
+"""
+    created = models.DateTimeField(auto_now_add=True)
+    currency = models.PositiveSmallIntegerField(choices=mch.CURRENCY_CHOICES)
+    buy = models.DecimalField(max_digits=4, decimal_places=2)
+    sale = models.DecimalField(max_digits=4, decimal_places=2)
+    source = models.PositiveSmallIntegerField(choices=mch.SOURCE_CHOICES)
+"""
+
+
+class RateCSV(View):
+    def get(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="rates.csv"'
+        writer = csv.writer(response)
+        headers = [
+            'id',
+            'created',
+            'currency',
+            'buy',
+            'sale',
+            'source',
+        ]
+        writer.writerow(headers)
+        for rate in Rate.objects.all().iterator():
+            writer.writerow(map(str, [
+                rate.id,
+                rate.created,
+                rate.get_currency_display(),
+                rate.buy,
+                rate.sale,
+                rate.get_source_display(),
+            ]))
+
+        return response
