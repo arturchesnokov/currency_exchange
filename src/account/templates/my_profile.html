@@ -3,7 +3,7 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-<form action="{% url 'account:profile' 1 %}" method="post">
+<form action="{% url 'account:profile' user.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save"/>
