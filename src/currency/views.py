@@ -35,13 +35,10 @@ class RateCSV(View):
         ]
         writer.writerow(headers)
         for rate in Rate.objects.all().iterator():
-            writer.writerow(map(str, [
-                rate.id,
-                rate.created,
-                rate.get_currency_display(),
-                rate.buy,
-                rate.sale,
-                rate.get_source_display(),
-            ]))
+            row = [
+                getattr(rate, f'get_{attr}_display')() if hasattr(rate, f'get_{attr}_display')
+                else getattr(rate, attr)
+                for attr in headers]
+            writer.writerow(row)
 
         return response
