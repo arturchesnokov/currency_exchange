@@ -96,15 +96,6 @@ DATABASES = {
         'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': os.environ['POSTGRES_HOST'],
         'PORT': os.environ['POSTGRES_PORT'],
-
-        # 'default': {
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'currency_exchange',
-        # 'USER': 'ce_user',
-        # 'PASSWORD': '123qweasd',
-        # # 'HOST': 'localhost',
-        # 'HOST': 'postgres',
-        # 'PORT': '5432',
     }
 }
 
