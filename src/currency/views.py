@@ -1,4 +1,7 @@
-from django.views.generic.list import ListView
+import csv
+
+from django.http import HttpResponse
+from django.views.generic.list import ListView, View
 from django.shortcuts import render
 
 from currency.models import Rate
@@ -12,13 +15,30 @@ from currency.models import Rate
 class RateListView(ListView):
     model = Rate
     template_name = 'rate_list.html'
-    paginate_by = 20
+    paginate_by = 50
+    ordering = '-created'
+    # ordering = ('-id', '-source')
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     queryset = Rate.objects.all().order_by('-id')
-    #     context['rates'] = queryset  # зачем указываем имя контектсу если в шаблоне используем object_list?
-    #     return context
 
-    def get_queryset(self):
-        return Rate.objects.all().order_by('-id')
+class RateCSV(View):
+    def get(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="rates.csv"'
+        writer = csv.writer(response)
+        headers = [
+            'id',
+            'created',
+            'currency',
+            'buy',
+            'sale',
+            'source',
+        ]
+        writer.writerow(headers)
+        for rate in Rate.objects.all().iterator():
+            row = [
+                getattr(rate, f'get_{attr}_display')() if hasattr(rate, f'get_{attr}_display')
+                else getattr(rate, attr)
+                for attr in headers]
+            writer.writerow(row)
+
+        return response
