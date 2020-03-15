@@ -15,29 +15,9 @@ from currency.models import Rate
 class RateListView(ListView):
     model = Rate
     template_name = 'rate_list.html'
-    paginate_by = 20
-    ordering = '-id'
+    paginate_by = 50
+    ordering = '-created'
     # ordering = ('-id', '-source')
-
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     queryset = Rate.objects.all().order_by('-id')
-    #     context['rates'] = queryset  # зачем указываем имя контектсу если в шаблоне используем object_list?
-    #     return context
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     return queryset.order_by('-id')
-        # return Rate.objects.all().order_by('-id')
-
-
-"""
-    created = models.DateTimeField(auto_now_add=True)
-    currency = models.PositiveSmallIntegerField(choices=mch.CURRENCY_CHOICES)
-    buy = models.DecimalField(max_digits=4, decimal_places=2)
-    sale = models.DecimalField(max_digits=4, decimal_places=2)
-    source = models.PositiveSmallIntegerField(choices=mch.SOURCE_CHOICES)
-"""
 
 
 class RateCSV(View):
@@ -55,13 +35,10 @@ class RateCSV(View):
         ]
         writer.writerow(headers)
         for rate in Rate.objects.all().iterator():
-            writer.writerow(map(str, [
-                rate.id,
-                rate.created,
-                rate.get_currency_display(),
-                rate.buy,
-                rate.sale,
-                rate.get_source_display(),
-            ]))
+            row = [
+                getattr(rate, f'get_{attr}_display')() if hasattr(rate, f'get_{attr}_display')
+                else getattr(rate, attr)
+                for attr in headers]
+            writer.writerow(row)
 
         return response
