@@ -133,4 +133,4 @@ settings_local.py
 
 .idea/
 !.gitkeep
-/avatar/
+/avatar/*
