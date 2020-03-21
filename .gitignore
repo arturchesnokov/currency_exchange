@@ -134,3 +134,4 @@ settings_local.py
 .idea/
 !.gitkeep
 avatar/
+./static_content
