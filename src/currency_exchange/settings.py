@@ -41,13 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig',  # for media(avatars) cleanup
 
+    'currency',
+
     'django_extensions',
     'django_celery_beat',
 
     'account.apps.AccountConfig',
-    'currency',
+
     'rest_framework',
     'rest_framework_swagger',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -190,17 +193,18 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-
 # REST_USE_JWT = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 
 SWAGGER_SETTINGS = {
