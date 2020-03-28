@@ -20,10 +20,10 @@ class ContactSerializer(serializers.ModelSerializer):
         #     'email': {'write_only': True},
         # }
 
-        def create(self, validated_data):
-            subject = validated_data['title']
-            message = validated_data['text']
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [validated_data['email'], ]
-            send_email_async.delay(subject, message, email_from, recipient_list)
-            return super().create(validated_data)
+    def create(self, validated_data):
+        subject = validated_data['title']
+        message = validated_data['text']
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [validated_data['email'], ]
+        send_email_async.delay(subject, message, email_from, recipient_list)
+        return super().create(validated_data)
