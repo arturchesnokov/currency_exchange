@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 from account.tasks import send_email_async
 from currency_exchange import settings
 
@@ -21,9 +20,10 @@ class ContactSerializer(serializers.ModelSerializer):
         #     'email': {'write_only': True},
         # }
 
-        def save(self):
-            email_from = [settings.EMAIL_HOST_USER, ]
-            subject = self.validated_data['title']
-            message = self.validated_data['text']
-            recipient_list = self.validated_data['email']
+        def create(self, validated_data):
+            subject = validated_data['title']
+            message = validated_data['text']
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [validated_data['email'], ]
             send_email_async.delay(subject, message, email_from, recipient_list)
+            return super().create(validated_data)
