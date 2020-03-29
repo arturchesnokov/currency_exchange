@@ -1,5 +1,4 @@
 from rest_framework.test import APITestCase
-from decimal import Decimal
 
 from account.models import User
 from currency.models import Rate
@@ -103,7 +102,7 @@ class ApiRateTestCase(APITestCase):
         r_id = ApiRateTestCase.create_rate('1', 12.34, 45.67, '1')
 
         url = reverse('api-currency:rate', args=(r_id,))
-        data = {"currency": "2",}  # new value
+        data = {"currency": "2", }  # new value
 
         response = self.client.patch(url, data)
 
