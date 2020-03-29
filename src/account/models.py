@@ -29,7 +29,7 @@ class Contact(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
-class ActivationCode(models.Model):
+class ActivationCodeSms(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation_codes')
     created = models.DateTimeField(auto_now_add=True)
     code = models.UUIDField(default=uuid4, editable=False, unique=True)
