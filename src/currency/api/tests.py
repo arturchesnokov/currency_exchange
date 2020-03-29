@@ -4,7 +4,7 @@ from account.models import User
 from currency.models import Rate
 from django.urls import reverse
 
-
+# python manage.py test -v 2
 class ApiRateTestCase(APITestCase):
 
     @staticmethod
