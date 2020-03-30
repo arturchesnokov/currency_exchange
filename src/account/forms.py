@@ -22,7 +22,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'password2')
+        fields = ('email', 'username', 'password', 'password2', 'phone')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -32,12 +32,18 @@ class SignUpForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
+
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
         user.is_active = False
         user.save()
 
-        activation_code = user.activation_codes.create()
-        activation_code.send_activation_code()
+        sms_codes = user.sms_codes.create()
+        sms_codes.send_activation_code()
 
         return user
+
+
+class ActivateForm(forms.Form):
+    sms_code = forms.CharField()
+    user_id = forms.CharField(widget=forms.HiddenInput())

@@ -1,12 +1,11 @@
 from uuid import uuid4
 from datetime import datetime
 
-from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.urls import reverse
 from django.conf import settings
+
+from phonenumber_field.modelfields import PhoneNumberField
 
 from account.tasks import send_email_async
 
@@ -20,6 +19,7 @@ def avatar_path(instance, filename: str) -> str:
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True, default=None)
+    phone = PhoneNumberField()
 
 
 class Contact(models.Model):
@@ -29,26 +29,28 @@ class Contact(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
+def generate_sms_code():
+    import random
+    return random.randint(1000, 9999)
+
+
 class ActivationCodeSms(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activation_codes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sms_codes')
     created = models.DateTimeField(auto_now_add=True)
-    code = models.UUIDField(default=uuid4, editable=False, unique=True)
+    code = models.PositiveIntegerField(default=generate_sms_code)
     is_activated = models.BooleanField(default=False)
 
     @property
     def is_expired(self):
         now = datetime.now()
         diff = now - self.created
-        return diff.days > 7
+        return diff.days > 1
 
-    # send_email_async(subject, message, email_from, recipient_list)
+    # Here can be sms sending method
     def send_activation_code(self):
-        link = reverse('account:activate', args=(self.code,))
         subject = 'Activation code'
-        message = f'Your code: http://127.0.0.1{link} '
+        message = f'Your code:{self.code} '
         email_from = [settings.EMAIL_HOST_USER, ]
         recipient_list = [self.user.email, ]
 
         send_email_async.delay(subject, message, email_from, recipient_list)
-
-
