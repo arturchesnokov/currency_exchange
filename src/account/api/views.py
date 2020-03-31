@@ -17,7 +17,7 @@ class ContactsView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Contact.objects.filter(email=user.email)
+        return super().get_queryset().filter(email=user.email)
 
 
 class ContactView(generics.RetrieveUpdateAPIView):
