@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'django_cleanup.apps.CleanupConfig',  # for media(avatars) cleanup
+    'crispy_forms',
 
     'currency',
 
@@ -168,6 +170,8 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/10'),
     }
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  # django-crispy-forms
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
