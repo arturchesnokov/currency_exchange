@@ -24,9 +24,10 @@ urlpatterns = [
 
     # API
     path(f'{API_PREFIX}/currency/', include('currency.api.urls')),
+    path(f'{API_PREFIX}/account/', include('account.api.urls')),
 
-    # path(f'{API_PREFIX}/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path(f'{API_PREFIX}/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path(f'{API_PREFIX}/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path(f'{API_PREFIX}/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]
 # SWAGGER
