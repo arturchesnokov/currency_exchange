@@ -6,6 +6,7 @@ from django.conf import settings
 
 from django.views.generic.base import TemplateView
 
+from rest_framework_swagger.views import get_swagger_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -31,8 +32,6 @@ urlpatterns = [
 
 ]
 # SWAGGER
-from rest_framework_swagger.views import get_swagger_view
-
 schema_view = get_swagger_view(title='DOCS')
 
 urlpatterns.append(path(f'{API_PREFIX}/docs/', schema_view))

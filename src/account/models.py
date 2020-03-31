@@ -1,8 +1,6 @@
 from uuid import uuid4
 from datetime import datetime
 
-from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -50,5 +48,3 @@ class ActivationCode(models.Model):
         recipient_list = [self.user.email, ]
 
         send_email_async.delay(subject, message, email_from, recipient_list)
-
-

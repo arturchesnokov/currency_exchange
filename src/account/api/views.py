@@ -1,14 +1,8 @@
-from requests import Response
-from rest_framework.decorators import api_view
-from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-
 from account.models import Contact
-from account.tasks import send_email_async
-from currency_exchange import settings
 
 from account.api.serializers import ContactSerializer
 
-from rest_framework import generics, status
+from rest_framework import generics
 
 
 class ContactsView(generics.ListCreateAPIView):

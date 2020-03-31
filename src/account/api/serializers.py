@@ -16,10 +16,6 @@ class ContactSerializer(serializers.ModelSerializer):
             'text',
         )
 
-        # extra_kwargs = {
-        #     'email': {'write_only': True},
-        # }
-
     def create(self, validated_data):
         subject = validated_data['title']
         message = validated_data['text']
