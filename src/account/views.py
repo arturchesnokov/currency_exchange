@@ -67,35 +67,31 @@ class SignUpView(CreateView):
 class Activate(FormView):
     form_class = ActivateForm
     template_name = 'signup.html'
+    success_url = reverse_lazy('index')
 
     def get_initial(self):
         initials = super(Activate, self).get_initial()
         # breakpoint()
-        initials['user_id'] = self.request.path.split('/')[-1]
+        initials['user_id'] = self.request.path.split('/')[-1]  # TODO how to get id from URL?
         return initials
 
+    # def post(self, request):
+    #     user_id = request.session['user_id']
+    #     sms_code = request.POST['sms_code']
+    #     ac = get_object_or_404(
+    #         ActivationCodeSms.objects.select_related('user'),
+    #         code=sms_code,
+    #         user_id=user_id,
+    #         is_activated=False
+    #     )
     #
-    # def get_success_url(self):
-    #     pk = self.kwargs['user_id']
-    #     return reverse('banker', kwargs={'pk': pk})
-
-    def post(self, request):
-        user_id = request.session['user_id']
-        sms_code = request.POST['sms_code']
-        ac = get_object_or_404(
-            ActivationCodeSms.objects.select_related('user'),
-            code=sms_code,
-            user_id=user_id,
-            is_activated=False
-        )
-
-        if ac.is_expired:
-            raise Http404
-
-        ac.is_activated = True
-        ac.save(update_fields=['is_activated'])
-
-        user = ac.user
-        user.is_active = True
-        user.save(update_fields=['is_active'])
-        return redirect('index')
+    #     if ac.is_expired:
+    #         raise Http404
+    #
+    #     ac.is_activated = True
+    #     ac.save(update_fields=['is_activated'])
+    #
+    #     user = ac.user
+    #     user.is_active = True
+    #     user.save(update_fields=['is_active'])
+    #     return redirect('index')

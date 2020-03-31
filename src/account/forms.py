@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from account.models import User, ActivationCodeSms
 
@@ -48,41 +48,40 @@ class SignUpForm(forms.ModelForm):
 
 class ActivateForm(forms.Form):
     sms_code = forms.CharField()
-    # user_id = forms.CharField(widget=forms.HiddenInput())
-    user_id = forms.CharField()
+    user_id = forms.CharField(widget=forms.HiddenInput())
+    # user_id = forms.CharField()
 
     def clean(self):
         cleaned_data = super().clean()
         if not self.errors:
             code = cleaned_data['sms_code']
             user_id = cleaned_data['user_id']
-            ac = get_object_or_404(
-                ActivationCodeSms.objects.select_related('user'),
-                code=code,
-                user_id=user_id,
-                is_activated=False
-            )
-
-            if cleaned_data['password'] != cleaned_data['password2']:
-                raise forms.ValidationError('Passwords not equal!')
+            try:
+                ac = ActivationCodeSms.objects.select_related('user').filter(
+                    code=code,
+                    user_id=user_id,
+                    is_activated=False
+                ).first()
+            except:
+                raise forms.ValidationError('Wrong code')
         return cleaned_data
 
     def save(self, commit=True):
-        ac = get_object_or_404(
-            ActivationCodeSms.objects.select_related('user'),
-            code=code,
-            user_id=user_id,
+        data = self.cleaned_data
+
+        ac = ActivationCodeSms.objects.select_related('user').filter(
+            code=data['code'],
+            user_id=data['user_id'],
             is_activated=False
-        )
+        ).first()
 
+        if ac.is_expired:
+            raise forms.ValidationError('Expired code')
 
+        ac.is_activated = True
+        ac.save(update_fields=['is_activated'])
 
-    if ac.is_expired:
-        raise Http404
-
-    ac.is_activated = True
-    ac.save(update_fields=['is_activated'])
-
-    user = ac.user
-    user.is_active = True
-    user.save(update_fields=['is_active'])
+        user = ac.user
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+        return redirect('index')
