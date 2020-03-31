@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.views import generic
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, View, FormView
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
@@ -59,12 +59,25 @@ class SignUpView(CreateView):
 
     def get_success_url(self):
         self.request.session['user_id'] = self.object.id
-        return super().get_success_url()
+        us_id = [self.object.id]
+        return reverse_lazy('account:activate', args=us_id)
+        # return reverse_lazy('account:activate', kwargs={'us_id' : us_id})
 
 
 class Activate(FormView):
     form_class = ActivateForm
     template_name = 'signup.html'
+
+    def get_initial(self):
+        initials = super(Activate, self).get_initial()
+        # breakpoint()
+        initials['user_id'] = self.request.path.split('/')[-1]
+        return initials
+
+    #
+    # def get_success_url(self):
+    #     pk = self.kwargs['user_id']
+    #     return reverse('banker', kwargs={'pk': pk})
 
     def post(self, request):
         user_id = request.session['user_id']

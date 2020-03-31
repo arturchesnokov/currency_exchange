@@ -11,5 +11,5 @@ urlpatterns = [
     path('contact/', ContactForm.as_view(), name='contact'),
     path('profile/<int:pk>/', MyProfile.as_view(), name='profile'),
     path('signup', SignUpView.as_view(), name='signup'),
-    path('activate/', Activate.as_view(), name='activate'),
+    path('activate/<int:pk>', Activate.as_view(), name='activate'),
 ]
