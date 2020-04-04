@@ -15,22 +15,10 @@ CELERY_ALWAYS_EAGER = True
 CELERY_TASK_ALWAYS_EAGER = True
 
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.sqlite3',
-'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 EMAIL_BACKEND = 'django.core.mail.outbox'
-
-# EMAIL_HOST_USER = 'achesn.info@gmail.com'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # email to logs
-# # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# # EMAIL_HOST = 'smtp.gmail.com'
-# # EMAIL_USE_TLS = True
-# # EMAIL_PORT = 587
-# # EMAIL_HOST_PASSWORD = 't5y8BGteTU4K'
-#
-# STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static')
-
-
