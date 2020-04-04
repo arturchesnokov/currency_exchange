@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 from account.models import User
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='session', autouse=True)
 def db_session(request, django_db_setup, django_db_blocker):
     """
     Changed scope to 'session'
@@ -23,19 +23,20 @@ def db_session(request, django_db_setup, django_db_blocker):
 
 @pytest.fixture(scope='session')
 def api_client():
+
     client = APIClient()
 
-    def login(username, password):
-        url_auth = reverse('token_obtain_pair')
-
-        response = client.post(
-            url_auth,
-            data={'username': username, 'password': password},
-            format='json',
+    def login(username, password, headers=None):
+        r = client.post(reverse('token_obtain_pair'),
+                        data=dict(username=username, password=password),
+                        headers=headers)
+        assert r.status_code == 200, r.content
+        assert "access" in r.json(), r.content
+        token = r.json()['access']
+        client.credentials(
+            HTTP_AUTHORIZATION=f'JWT {token}'
         )
-        assert response.status_code == 200
-        access = response.json()['access']
-        client.credentials(HTTP_AUTHORIZATION=f'JWT {access}')
+        return token
 
     client.login = login
 
@@ -43,6 +44,7 @@ def api_client():
 
 
 @pytest.fixture(scope='session')
+@pytest.mark.django_db
 def user():
     # create user
     email = 'srjgkbdrgjdbr@mail.com'
