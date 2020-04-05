@@ -19,5 +19,3 @@ class RatesView(generics.ListCreateAPIView):
 class RateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
-
-#JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTg3MzEyNTAxLCJqdGkiOiI1MWU5ZWNkNmNkOWY0OTdhYmY3M2I2ODM0N2EzODQ0OSIsInVzZXJfaWQiOjN9.MLZbc0IHoirDuk18EvBmSXb6N_5ghWUKtr2W4nyGwtY
