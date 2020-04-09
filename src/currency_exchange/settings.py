@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     'account.apps.AccountConfig',
     'currency',
+
+    'phonenumber_field',  # for phone in account
 ]
 
 MIDDLEWARE = [

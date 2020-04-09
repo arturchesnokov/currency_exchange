@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from account.models import User
+from django.shortcuts import get_object_or_404, redirect
+
+from account.models import User, ActivationCodeSms
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -22,7 +24,7 @@ class SignUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'password2')
+        fields = ('email', 'username', 'password', 'password2', 'phone')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -32,12 +34,54 @@ class SignUpForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
+
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
         user.is_active = False
         user.save()
 
-        activation_code = user.activation_codes.create()
-        activation_code.send_activation_code()
+        sms_codes = user.sms_codes.create()
+        sms_codes.send_activation_code()
 
         return user
+
+
+class ActivateForm(forms.Form):
+    sms_code = forms.CharField()
+    user_id = forms.CharField(widget=forms.HiddenInput())
+    # user_id = forms.CharField()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.errors:
+            code = cleaned_data['sms_code']
+            user_id = cleaned_data['user_id']
+            try:
+                ac = ActivationCodeSms.objects.select_related('user').filter(
+                    code=code,
+                    user_id=user_id,
+                    is_activated=False
+                ).first()
+            except:
+                raise forms.ValidationError('Wrong code')
+        return cleaned_data
+
+    def save(self, commit=True):
+        data = self.cleaned_data
+
+        ac = ActivationCodeSms.objects.select_related('user').filter(
+            code=data['code'],
+            user_id=data['user_id'],
+            is_activated=False
+        ).first()
+
+        if ac.is_expired:
+            raise forms.ValidationError('Expired code')
+
+        ac.is_activated = True
+        ac.save(update_fields=['is_activated'])
+
+        user = ac.user
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+        return redirect('index')
