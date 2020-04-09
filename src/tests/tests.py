@@ -60,7 +60,7 @@ def test_get_rates(api_client, user):  # GET
     response = api_client.get(url)
     log.debug('Response->json: ', response.json())
     assert response.status_code == 200
-    assert len(response.json()) == 3
+    assert len(response.json()['results']) == 3
 
 
 def test_create_rate(api_client, user):  # POST
@@ -154,7 +154,7 @@ def test_get_contacts(api_client, user):  # GET
     response = api_client.get(url)
     log.debug('Response->json: ', response.json())
     assert response.status_code == 200
-    assert len(response.json()) == 3
+    assert len(response.json()['results']) == 3
 
 
 def test_create_contact(api_client, user):  # POST
