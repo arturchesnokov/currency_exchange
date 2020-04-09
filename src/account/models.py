@@ -1,3 +1,4 @@
+import random
 from uuid import uuid4
 from datetime import datetime
 
@@ -30,7 +31,6 @@ class Contact(models.Model):
 
 
 def generate_sms_code():
-    import random
     return random.randint(1000, 9999)
 
 
