@@ -130,6 +130,7 @@ dmypy.json
 .pyre/
 
 settings_local.py
+settings_test.py
 
 .idea/
 !.gitkeep

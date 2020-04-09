@@ -25,9 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'nqq=gk7dj)0et#lc#eg5c(^hakixx5u&bo4uyl%x7p)gj#%!y)'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -53,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'django_filters',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -152,10 +150,18 @@ USE_TZ = False
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "..", "static_content", "media")
 
+STATIC_ROOT = ''
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -209,6 +215,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 SWAGGER_SETTINGS = {
