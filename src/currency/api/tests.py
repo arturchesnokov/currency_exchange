@@ -33,7 +33,7 @@ class ApiRateTestCase(APITestCase):
         response = self.client.get(reverse('api-currency:rates'))
         print('Response->json: ', response.json())
         assert response.status_code == 200
-        assert len(response.json()) == 3
+        assert len(response.json()['results']) == 3
 
     def test_create_rate(self):  # POST
         print("test_create_rate started")
