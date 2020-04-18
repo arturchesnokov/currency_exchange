@@ -15,15 +15,10 @@ from currency import model_choices as mch
 from currency.utils import generate_rate_cache_key
 
 
-# def rates(request):
-#     queryset = Rate.objects.order_by('-created')[:20]
-#     return render(request, 'rates_list.html', context={'rates': queryset})
-
-
 class RateListView(FilterView):
     model = Rate
     template_name = 'rate_list.html'
-    paginate_by = 10
+    paginate_by = 20
     ordering = '-created'
     filterset_class = RateFilter
 
