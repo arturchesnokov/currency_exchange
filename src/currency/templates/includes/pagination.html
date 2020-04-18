@@ -1,17 +1,15 @@
-<div class="pagination">
-    <span class="step-links">
+<ul class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page=1&{{ query_params }}">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}&{{ query_params }}">previous</a>
+    <li><a class="page-link" href="?page=1&{{ query_params }}">&laquo; first</a></li>
+           <li> <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ query_params }}">previous</a></li>
         {% endif %}
 
-        <span class="current">
+        <li><span class="page-link">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+        </span></li>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}&{{ query_params }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}&{{ query_params }}">last &raquo;</a>
+            <li><a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ query_params }}">next</a></li>
+            <li><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ query_params }}">last &raquo;</a></li>
         {% endif %}
-    </span>
-</div>
+</ul>
